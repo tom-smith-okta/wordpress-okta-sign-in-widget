@@ -25,6 +25,8 @@ foreach ($env as $k => $v) { define($k, $v); }
 
 define( 'WP_DEBUG', true );
 
+$GLOBALS['redirect_uri'] = "my_redirect_uri";
+
 class OktaSignIn {
 
 	public function __construct() {
@@ -45,16 +47,19 @@ class OktaSignIn {
 				exit;
 			}
 		}
+
 		if( !isset( $_GET['code'] ) ) {
 
 			if( isset( $_GET['id_token'] ) ) {
 				// TODO: Check id token against Okta
 				$this->set_wp_session($_GET['id_token']);
 			}
+			else {
+				$template = plugin_dir_path( __FILE__ ) . 'templates/sign-in-form.php';
 
-			$template = plugin_dir_path( __FILE__ ) . 'templates/sign-in-form.php';
-			load_template( $template );
-			exit;
+				load_template( $template );
+				exit;
+			}
 		} else {
 			// Determine who authenticated and start a WordPress session
 
@@ -104,7 +109,19 @@ class OktaSignIn {
 		wp_set_current_user( $user_id );
 		wp_set_auth_cookie( $user_id );
 		do_action( 'wp_login', $user->user_login );
-		wp_redirect( home_url() );
+
+		if (isset($_GET["redirect_uri"])) {
+			$redirect_uri = $_GET["redirect_uri"];
+		}
+		else {
+			$redirect_uri = home_url();
+		}
+
+		echo "the redirect uri is: " . $redirect_uri;
+
+		exit;
+
+		wp_redirect( $redirect_uri );
 	}
 }
 
