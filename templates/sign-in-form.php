@@ -36,7 +36,7 @@
 
 	var origin_uri = '<?php echo $redirect_uri ?>'
 
-	// alert("the redirect_uri is: " + redirect_uri)
+	// alert("the redirect_uri is: " + origin_uri)
 
 	var token_obj = signIn.tokenManager.get('id_token');
 
@@ -53,7 +53,9 @@
 
 		console.log("the redirect url is: " + redirectUri)
 
-		// window.location = redirectUri
+		// alert ("the redirect url is: " + redirectUri)
+
+		window.location = redirectUri
 	}
 
 	signIn.renderEl({

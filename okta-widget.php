@@ -25,8 +25,6 @@ foreach ($env as $k => $v) { define($k, $v); }
 
 define( 'WP_DEBUG', true );
 
-$GLOBALS['redirect_uri'] = "my_redirect_uri";
-
 class OktaSignIn {
 
 	public function __construct() {
@@ -116,10 +114,6 @@ class OktaSignIn {
 		else {
 			$redirect_uri = home_url();
 		}
-
-		echo "the redirect uri is: " . $redirect_uri;
-
-		exit;
 
 		wp_redirect( $redirect_uri );
 	}
